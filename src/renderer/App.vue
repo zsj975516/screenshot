@@ -408,6 +408,8 @@
                       fill: this.option[this.operateType].currColor
                     })
                     this.layer.add(textShape).draw()
+                    let rect = textShape.getClientRect()
+                    this.refreshFlagRange({x1: rect.x, x2: rect.x + rect.width, y1: rect.y, y2: rect.y + rect.height})
                   }
                   el.onblur = null
                   el.innerText = ''
@@ -418,28 +420,8 @@
                 }
                 el.focus()
               } else {
-                let w = shape.getWidth()
-                let h = shape.getHeight()
-
-                let x = shape.x()
-                let y = shape.y()
-
-                if (this.operateType === 'ellipse') {
-                  x -= w / 2
-                  y -= h / 2
-                } else if (this.operateType === 'arrow' || this.operateType === 'doodle') {
-                  let points = shape.getAttr('points')
-                  let _w = this.stage.getWidth()
-                  let _h = this.stage.getHeight()
-                  for (let i = 0; i < points.length; i += 2) {
-                    _w = Math.min(_w, points[i])
-                    _h = Math.min(_h, points[i + 1])
-                  }
-                  if (_w < 0) x += _w
-                  if (_h < 0) y += _h
-                }
-
-                this.refreshFlagRange({x1: x, x2: x + w, y1: y, y2: y + h})
+                let rect = shape.getClientRect()
+                this.refreshFlagRange({x1: rect.x, x2: rect.x + rect.width, y1: rect.y, y2: rect.y + rect.height})
                 shape = null
               }
               break
